@@ -64,3 +64,11 @@ This project is a **Library Management System** built using **Node.js**, **Expre
 ├── server.js                   # Main server file (Express.js)
 ├── package.json                # NPM dependencies and scripts
 └── README.md                   # Project documentation
+
+## **Contribution**
+Contributions are welcome! Please fork the repository and create a pull request with your improvements.
+
+## **Authors**
+Nadia IRADUKUNDA HIRWA
+Denice Mushi
+Nnaji Christian
