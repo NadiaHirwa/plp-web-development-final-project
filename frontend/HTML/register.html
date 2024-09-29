@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register as a Librarian</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            margin: 50px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #2980b9;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input[type="text"], input[type="email"], input[type="password"] {
+            width: 95%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #3498db;
+        }
+
+        .message {
+            margin-top: 20px;
+            text-align: center;
+            color: #2ecc71;
+        }
+
+        .login {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .login a {
+            text-decoration: none;
+            color: #2980b9;
+            transition: color 0.3s ease;
+            font-weight: bold;
+        }
+
+        .login a:hover {
+            color: blue;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Register as a Librarian</h2>
+        <form id="signupForm">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Enter your username" required>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+            <label for="contact">Contact Number</label>
+            <input type="text" id="contact" name="contact" placeholder="Enter your contact" required>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+
+            <button type="submit">Sign Up</button>
+        </form>
+        <div id="message" class="message"></div>
+        <div class="login">Already have an account? <a href="login.html">Login</a></div>
+    </div>
+
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', async function(event) {
+            event.preventDefault();  // Prevent form from submitting the default way
+
+            // Get form data
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                // Send API request to the backend for registration
+                const response = await fetch('http://localhost:5000/api/users/register', {  
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, email, password }) 
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Success message
+                    document.getElementById('message').innerHTML = `Registration successful! Welcome, <strong>${data.username}</strong>.`;
+                } else {
+                    // Error message (e.g., email/username already taken)
+                    document.getElementById('message').innerHTML = `Error: ${data.msg}`;
+                }
+
+            } catch (error) {
+                // Handle general errors
+                document.getElementById('message').innerHTML = 'An error occurred during registration.';
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</body>
+</html>

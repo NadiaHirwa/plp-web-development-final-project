@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: #34495e;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .navbar a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        h1, h2 {
+            color: #2980b9;
+        }
+
+        form {
+            background-color: #ecf0f1;
+            padding: 15px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"], input[type="email"], input[type="password"], select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #3498db;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+
+        #update-profile, #change-password {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <a href="#" onclick="showSection('dashboard')">Dashboard</a>
+        <a href="#" onclick="showSection('update-profile')">Update Profile</a>
+        <a href="#" onclick="showSection('change-password')">Change Password</a>
+    </div>
+
+    <div class="container">
+        <h1>User Dashboard</h1>
+
+        <!-- User Dashboard -->
+        <div id="dashboard">
+            <h2>Welcome, User!</h2>
+            <p id="userID">Your User ID: U001</p>
+            <p id="booksIssued">Books Issued: 3</p>
+            <p id="returnDate">Return Date for Issued Books: 2024-09-20</p>
+
+            <!-- View Books Section -->
+            <h2>Available Books</h2>
+            <table id="booksTable">
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Genre</th>
+                    <th>Availability</th>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Update Profile Section -->
+        <div id="update-profile">
+            <h2>Update Your Profile</h2>
+            <form id="updateProfileForm">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Update username" required>
+
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Update email" required>
+
+                <label for="phone">Phone</label>
+                <input type="text" id="phone" name="contact" placeholder="Update phone number" required>
+
+                <button type="submit">Update Profile</button>
+            </form>
+        </div>
+
+        <!-- Change Password Section -->
+        <div id="change-password">
+            <h2>Change Password</h2>
+            <form id="changePasswordForm">
+                <label for="current-password">Current Password</label>
+                <input type="password" id="current-password" name="current-password" placeholder="Enter current password" required>
+
+                <label for="new-password">New Password</label>
+                <input type="password" id="new-password" name="new-password" placeholder="Enter new password" required>
+
+                <label for="confirm-password">Confirm New Password</label>
+                <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm new password" required>
+
+                <button type="submit">Change Password</button>
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        // Function to show different sections based on the navbar clicks
+        function showSection(section) {
+            document.getElementById('dashboard').style.display = section === 'dashboard' ? 'block' : 'none';
+            document.getElementById('update-profile').style.display = section === 'update-profile' ? 'block' : 'none';
+            document.getElementById('change-password').style.display = section === 'change-password' ? 'block' : 'none';
+        }
+
+        // Fetch available books from the backend
+        async function fetchBooks() {
+            try {
+                const response = await fetch('http://localhost:5000/api/books'); 
+                const books = await response.json();
+                const booksTable = document.getElementById('booksTable');
+
+                books.forEach(book => {
+                    const row = booksTable.insertRow();
+                    row.innerHTML = `
+                        <td>${book.id}</td>
+                        <td>${book.title}</td>
+                        <td>${book.author}</td>
+                        <td>${book.genre}</td>
+                        <td>${book.available_copies > 0 ? 'Available' : 'Not Available'}</td>
+                    `;
+                });
+            } catch (error) {
+                console.error('Error fetching books:', error);
+            }
+        }
+
+        // Update profile functionality
+        document.getElementById('updateProfileForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+
+            try {
+                const response = await fetch('http://localhost:5000/api/users/update', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, email, phone }),
+                });
+
+                const result = await response.json();
+                alert(result.message || 'Profile updated successfully!');
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                alert('Failed to update profile. Please try again.');
+            }
+        });
+
+        // Change password functionality
+        document.getElementById('changePasswordForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const currentPassword = document.getElementById('current-password').value;
+            const newPassword = document.getElementById('new-password').value;
+
+            try {
+                const response = await fetch('http://localhost:5000/api/users/change-password', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ currentPassword, newPassword }),
+                });
+
+                const result = await response.json();
+                alert(result.message || 'Password changed successfully!');
+            } catch (error) {
+                console.error('Error changing password:', error);
+                alert('Failed to change password. Please try again.');
+            }
+        });
+
+        // By default, show the "Dashboard" section
+        showSection('dashboard');
+        fetchBooks(); 
+    </script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System</title>
+    <style>
+        /* Internal CSS */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('library-background.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+
+        nav {
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        nav h1 {
+            color: white;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-right a {
+            color: white;
+            text-decoration: none;
+            padding: 0 15px;
+            font-size: 18px;
+        }
+
+        .navbar-right a:hover {
+            text-decoration:none;
+            color: blue;
+        }
+
+        section {
+            padding: 60px 20px;
+            text-align: center;
+            
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+
+        #mission, #vision, #about, #contact {
+            margin: 50px 0;
+            margin: 5%;
+        }
+
+        footer {
+            background-color: rgba(0, 0, 0, 0.8);
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+
+        footer p {
+            margin: 0;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav>
+        <h1>Library Management</h1>
+        <div class="navbar-right">
+            <a href="#mission">Mission</a>
+            <a href="#vision">Vision</a>
+            <a href="#about">About Us</a>
+            <a href="#contact">Contact Us</a>
+            <a href="login.html">login</a>
+        </div>
+        
+    </nav>
+
+    <!-- Main Content -->
+    <section id="mission">
+        <h2>Mission</h2>
+        <p>
+            Our mission is to foster an inclusive learning environment by providing comprehensive resources and access to educational materials. 
+            We aim to support every student's journey of knowledge discovery, innovation, and research. Our commitment is to ensure that everyone, regardless 
+            of background, has access to the wealth of information available within our library.
+            
+        </p>    </section>
+
+    <section id="vision">
+        <h2>Vision</h2>
+        <p>
+            Our vision is to become a leading center of knowledge and learning in our community. We strive to inspire a culture of continuous learning, 
+            where students, educators, and researchers can collaborate, innovate, and excel. By integrating the latest technologies and curating diverse 
+            collections, we aim to be a cornerstone of academic growth and personal development for generations to come.
+        </p>    </section>
+
+    <section id="about">
+        <h2>About Us</h2>
+        <p>
+            The Library Management System is a comprehensive platform designed to enhance access to information and streamline library services. 
+            We believe in the transformative power of knowledge and are dedicated to providing an easy, user-friendly interface for students, researchers, 
+            and faculty members to explore and borrow books, access resources, and manage their library accounts efficiently. With our robust catalog, 
+            knowledgeable staff, and commitment to innovation, we are proud to support the academic community and contribute to lifelong learning.
+        </p>    </section>
+
+    <section id="contact">
+        <h2>Contact Us</h2>
+        <p>Email: info@library.com</p>
+        <p>Phone: +123-456-7890</p>
+        <p>Address: 123 Library Lane, Knowledge City</p>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Library Management System. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Updated Internal JavaScript
+        document.querySelectorAll('nav a').forEach(anchor => {
+            // Only apply smooth scrolling to internal links starting with '#'
+            if (anchor.getAttribute('href').startsWith('#')) {
+                anchor.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>

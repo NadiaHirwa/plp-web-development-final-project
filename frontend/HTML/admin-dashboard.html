@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: #34495e;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .navbar a {
+            color: #fff;
+            margin: 0 15px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        h1, h2 {
+            color: #34495e;
+        }
+
+        form {
+            background-color: #ecf0f1;
+            padding: 15px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input[type="text"], input[type="number"], input[type="date"], select {
+            width: 98%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #3498db;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .action-btn {
+            padding: 8px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .action-btn:hover {
+            background-color: #2ecc71;
+        }
+
+        #manage-books, #issued-books, #user-details {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <a href="#" onclick="showSection('add-book')">Add Book</a>
+        <a href="#" onclick="showSection('issued-books')">Issued Books</a>
+        <a href="#" onclick="showSection('user-details')">View Users</a>
+    </div>
+
+    <div class="container">
+        <h1>Admin Dashboard</h1>
+
+        <!-- Add book from section -->
+        <div id="add-book">
+            <h2>Add a New Book</h2>
+            <form id="addBookForm" onsubmit="addBook(event)">
+                <label for="title">Book Title</label>
+                <input type="text" id="title" name="title" placeholder="Enter book title" required>
+
+                <label for="author">Author</label>
+                <input type="text" id="author" name="author" placeholder="Enter author name" required>
+
+                <label for="isbn">ISBN</label>
+                <input type="text" id="isbn" name="isbn" placeholder="Enter book isbn" required>
+
+                <label for="year">Publication Year</label>
+                <input type="number" id="year" name="year" placeholder="Enter publication Year" required>
+
+                <label for="category">Category</label>
+                <input type="text" id="category" name="category" placeholder="Enter book category" required>
+
+                <label for="quantity">Quantity</label>
+                <input type="number" id="quantity" name="quantity" placeholder="Enter quantity" required><br/>
+
+                <button type="submit">Add Book</button>
+            </form>
+
+            <!-- Manage Books Table -->
+            <h2>Manage Books</h2>
+            <table id="booksTable">
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>ISBN</th>
+                    <th>Quantity</th>
+                    <th>Genre</th>
+                    <th>Total copies</th>
+                    <th>Available copies</th>
+                    <th>CreatedAt</th>
+                    <th>updatedAt</th>
+                    <th>Actions</th>
+                </tr>
+                <tbody id="booksBody">
+                    <!-- Books will be dynamically added here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Issued Books Section -->
+        <div id="issued-books">
+            <h2>Add new Borrow Record</h2>
+            <form id="addBorrowrecordform" onsubmit="addBorrowRecord(event)">
+                <label for="bookId">Book ID</label>
+                <input type="text" id="bookId" name="bookId" placeholder="Enter Book ID" required>
+
+                <label for="userId">User ID</label>
+                <input type="text" id="userId" name="userId" placeholder="Enter User ID" required>
+
+                <label for="borrowDate">Borrow Date</label>
+                <input type="date" id="borrowDate" name="borrowDate" required>
+
+                <label for="returnDate">Return Date</label>
+                <input type="date" id="returnDate" name="returnDate" required><br/>
+
+                <button type="submit">Add</button>
+            </form>
+            <h2>Issued Books</h2>
+            <table id="borrowRecordsTable">
+                <tr>
+                    <th>Book ID</th>
+                    <th>User ID</th>
+                    <th>Borrow Date</th>
+                    <th>Return Date</th>
+                    <th>Actions</th>
+                </tr>
+                <tbody id="borrowRecordsBody">
+                    <!-- Borrow records will be dynamically added here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- View users Section -->
+        <div id="user-details">
+            <h2>User Details</h2>
+            <table id="usersTable">
+                <tr>
+                    <th>User ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Issued Books</th>
+                </tr>
+                <tbody id="usersBody">
+                    <!-- Users will be dynamically added here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+    <script>
+        // By default, show the "Add Book" section
+        showSection('add-book');
+    </script>
+</body>
+</html>
