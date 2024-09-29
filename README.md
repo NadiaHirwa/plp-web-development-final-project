@@ -90,7 +90,7 @@ This **Library Management System** is developed using **Node.js**, **Express.js*
    ```
 
 5. **Access the Application**:  
-   Open your browser and go to `http://localhost:3000`.
+   Open your browser and go to `http://localhost:5000`.
 
 ## **Key Technologies**
 
