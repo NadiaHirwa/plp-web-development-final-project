@@ -1,23 +1,23 @@
-const User = require('../Models/user'); // Ensure you have the correct path to your User model
+const User = require('../Models/user'); 
 const { sign } = require('jsonwebtoken');
+const dotenv = require('dotenv').config();  
 
 // Register user
 async function register(req, res) {
-    const { username, email, password } = req.body; // Email is included here
+    const { username, email, password } = req.body; 
     try {
-        // Check if user with the same email exists
+        console.log("Register request received...");
+
         let user = await User.findOne({ where: { email } });
         if (user) {
             return res.status(400).json({ msg: 'Email already in use' });
         }
 
-        // Check if user with the same username exists
         user = await User.findOne({ where: { username } });
         if (user) {
             return res.status(400).json({ msg: 'Username already in use' });
         }
 
-        // Create user including the email
         user = await User.create({ username, email, password });
 
         const payload = {
@@ -26,17 +26,23 @@ async function register(req, res) {
             },
         };
 
+        console.log("JWT Payload:", payload);
+
         sign(
             payload,
-            process.env.JWT_SECRET,
+            process.env.JWT_SECRET, 
             { expiresIn: 3600 },
             (err, token) => {
-                if (err) throw err;
+                if (err) {
+                    console.log("JWT Sign Error:", err.message);
+                    throw err;
+                }
+                console.log("Generated JWT Token:", token);
                 res.json({ token });
             }
         );
     } catch (err) {
-        console.error(err.message);
+        console.error("Register Error:", err.message);
         res.status(500).send('Server error');
     }
 }
@@ -45,14 +51,14 @@ async function register(req, res) {
 async function login(req, res) {
     const { email, password } = req.body;
     try {
-        // Find user by email
+        console.log("Login request received...");
+
         const user = await User.findOne({ where: { email } });
         if (!user) {
             return res.status(400).json({ msg: 'Invalid credentials' });
         }
 
-        // Check if password matches
-        const isMatch = await user.comparePassword(password); // Ensure you have a comparePassword method in your User model
+        const isMatch = await user.comparePassword(password);
         if (!isMatch) {
             return res.status(400).json({ msg: 'Invalid credentials' });
         }
@@ -60,29 +66,32 @@ async function login(req, res) {
         const payload = {
             user: {
                 id: user.id,
-                role: user.role // Assuming the User model has a role field
+                role: user.role 
             },
         };
+
+        console.log("JWT Payload:", payload);
 
         sign(
             payload,
             process.env.JWT_SECRET,
             { expiresIn: 3600 },
             (err, token) => {
-                if (err) throw err;
+                if (err) {
+                    console.log("JWT Sign Error:", err.message);
+                    throw err;
+                }
+                console.log("Generated JWT Token:", token);
                 res.json({ token });
             }
         );
     } catch (err) {
-        console.error(err.message);
+        console.error("Login Error:", err.message);
         res.status(500).send('Server error');
     }
 }
 
-// Other user-related functions can be added here (e.g., getUserDetails, updateUser, deleteUser, etc.)
-
 module.exports = {
     register,
     login,
-    // export other functions as needed
 };

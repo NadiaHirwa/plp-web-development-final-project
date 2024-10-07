@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../Config/db');
 
+// Define the Book model
 const Book = sequelize.define('Book', {
     title: {
         type: DataTypes.STRING,
@@ -15,9 +16,9 @@ const Book = sequelize.define('Book', {
         allowNull: false,
         unique: true,
     },
-    publication_year: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
+    genre: { 
+        type: DataTypes.STRING,
+        allowNull: true, 
     },
     total_copies: {
         type: DataTypes.INTEGER,
@@ -27,6 +28,10 @@ const Book = sequelize.define('Book', {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
+}, {
+    sequelize,
+    modelName: 'Book',   
+    tableName: 'books', 
 });
 
 module.exports = Book;

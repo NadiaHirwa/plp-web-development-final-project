@@ -55,7 +55,10 @@ function fetchBooks() {
                 booksBody.insertAdjacentHTML('beforeend', newRow);
             });
         })
-        .catch(error => console.error('Error fetching books:', error));
+        .catch(error => {
+            console.error('Error fetching books:', error);
+            alert('Failed to fetch books. Please try again later.');
+        });
 }
 
 // Add a new book
@@ -71,16 +74,27 @@ function addBook(event) {
 
     fetch(`${apiBaseUrl}/books`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` }, 
+        headers: { 
+            'Content-Type': 'application/json', 
+            'Authorization': `Bearer ${localStorage.getItem('token')}` 
+        }, 
         body: JSON.stringify(bookData)
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
     .then(data => {
         alert('Book added successfully!');
         document.getElementById('addBookForm').reset();
         fetchBooks(); 
     })
-    .catch(error => console.error('Error adding book:', error));
+    .catch(error => {
+        console.error('Error adding book:', error);
+        alert('Failed to add book. Please check your input and try again.');
+    });
 }
 
 // Edit an existing book
@@ -101,15 +115,26 @@ function editBook(bookId) {
 
     fetch(`${apiBaseUrl}/books/${bookId}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` }, 
+        headers: { 
+            'Content-Type': 'application/json', 
+            'Authorization': `Bearer ${localStorage.getItem('token')}` 
+        }, 
         body: JSON.stringify(updatedData)
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
     .then(data => {
         alert('Book updated successfully!');
         fetchBooks(); 
     })
-    .catch(error => console.error('Error updating book:', error));
+    .catch(error => {
+        console.error('Error updating book:', error);
+        alert('Failed to update book. Please try again later.');
+    });
 }
 
 // Delete a book
@@ -117,13 +142,18 @@ function deleteBook(bookId) {
     if (confirm("Are you sure you want to delete this book?")) {
         fetch(`${apiBaseUrl}/books/${bookId}`, {
             method: 'DELETE',
-            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } 
+            headers: { 
+                'Authorization': `Bearer ${localStorage.getItem('token')}` 
+            } 
         })
         .then(() => {
             alert('Book deleted successfully!');
             fetchBooks(); 
         })
-        .catch(error => console.error('Error deleting book:', error));
+        .catch(error => {
+            console.error('Error deleting book:', error);
+            alert('Failed to delete book. Please try again later.');
+        });
     }
 }
 
@@ -158,7 +188,10 @@ function fetchBorrowRecords() {
                 borrowRecordsTable.insertAdjacentHTML('beforeend', newRow);
             });
         })
-        .catch(error => console.error('Error fetching borrow records:', error));
+        .catch(error => {
+            console.error('Error fetching borrow records:', error);
+            alert('Failed to fetch borrow records. Please try again later.');
+        });
 }
 
 // Add a new borrow record
@@ -173,29 +206,45 @@ function addBorrowRecord(event) {
 
     fetch(`${apiBaseUrl}/borrow-records`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` }, 
+        headers: { 
+            'Content-Type': 'application/json', 
+            'Authorization': `Bearer ${localStorage.getItem('token')}` 
+        }, 
         body: JSON.stringify(borrowData)
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
     .then(data => {
         alert('Borrow record added successfully!');
         document.getElementById('addBorrowrecordform').reset();
         fetchBorrowRecords(); 
     })
-    .catch(error => console.error('Error adding borrow record:', error));
+    .catch(error => {
+        console.error('Error adding borrow record:', error);
+        alert('Failed to add borrow record. Please try again later.');
+    });
 }
 
 // Mark a book as returned
 function returnBook(recordId) {
     fetch(`${apiBaseUrl}/borrow-records/${recordId}/return`, {
         method: 'PUT',
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } 
+        headers: { 
+            'Authorization': `Bearer ${localStorage.getItem('token')}` 
+        } 
     })
     .then(() => {
         alert('Book marked as returned!');
         fetchBorrowRecords(); 
     })
-    .catch(error => console.error('Error marking book as returned:', error));
+    .catch(error => {
+        console.error('Error marking book as returned:', error);
+        alert('Failed to mark book as returned. Please try again later.');
+    });
 }
 
 // Fetch all users
@@ -219,11 +268,14 @@ function fetchUsers() {
                         <td>${user.id}</td>
                         <td>${user.name}</td>
                         <td>${user.email}</td>
-                        <td>${user.issuedBooks || 0}</td>
+                        <td>${user.issuedBooks}</td>
                     </tr>
                 `;
                 userTable.insertAdjacentHTML('beforeend', newRow);
             });
         })
-        .catch(error => console.error('Error fetching users:', error));
+        .catch(error => {
+            console.error('Error fetching users:', error);
+            alert('Failed to fetch users. Please try again later.');
+        });
 }
